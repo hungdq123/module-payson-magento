@@ -53,11 +53,11 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
 
 		if(!is_null($order = $this->GetOrder()))
 		{
-			$order->setState(
+			$order->cancel()->save();/*setState(
 				Mage_Sales_Model_Order::STATE_CANCELED,
 				Mage_Sales_Model_Order::STATE_CANCELED,
 				$message)
-				->cancel()->save();
+				->cancel()->save();*/
 		}
 
 		return $this;
