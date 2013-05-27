@@ -13,9 +13,9 @@ class Payson_Payson_Helper_Api
 
 	const PAY_FORWARD_URL = '%s://%s%s.payson.%s/paySecure/';
 
-	const APPLICATION_ID = 'Magento Module 0.1.3';
+	const APPLICATION_ID = 'Magento Module 0.1.4';
 	const MODULE_NAME = 'payson_magento';
-	const MODULE_VERSION = '0.1.3';
+	const MODULE_VERSION = '0.1.4';
         
         const DEBUG_MODE_MAIL = 'testagent-1@payson.se';
         const DEBUG_MODE_AGENT_ID = '1';
@@ -173,7 +173,7 @@ class Payson_Payson_Helper_Api
 				'orderItemList.orderItem(' . $i . ').quantity'		=>
 					$qty,
 				'orderItemList.orderItem(' . $i . ').unitPrice'		=>
-					$item->getData('base_price'),
+					$base_price,
 				'orderItemList.orderItem(' . $i . ').taxPercentage'	=>
 					$tax_mod
 			);
@@ -967,12 +967,12 @@ catch(Exception $e)
                            
                                 //Mage::throwException('Invalid order id (' . $order->getId() . ')');
                             
-                            $order->setState(
+                            $order->cancel(); /*setState(
 					Mage_Sales_Model_Order::STATE_CANCELED,
 					Mage_Sales_Model_Order::STATE_CANCELED,
 					sprintf($helper->__(
 						'Ther order was denied by Payson.')))
-					->cancel();
+					->cancel();*/
                             //throw new Mage_Core_Exception(sprintf($helper->__('Denaid.')));
                             break;
                         
@@ -1069,7 +1069,7 @@ LIMIT
 				'token' => $payson_order->token
 			);
                 $url = vsprintf(self::API_CALL_PAYMENT_DETAILS, $this->GetFormatIfTest($payson_order->store_id));
-                print_r($url);exit;
+                //print_r($url);exit;
 		$client = $this->GetHttpClient($url)
 			->setParameterPost($args);
 
