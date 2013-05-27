@@ -1,153 +1,131 @@
 <?php
-class Payson_Payson_Helper_Api_Response_Standard
-	extends Payson_Payson_Helper_Api_Response_Standard_Parameters
-	implements Payson_Payson_Helper_Api_Response_Interface
-{
-	/*
-	 * Constants
-	 */
 
-	const ACK_SUCCESS = 'SUCCESS';
-	const ACK_FAILURE = 'FAILURE';
+class Payson_Payson_Helper_Api_Response_Standard extends Payson_Payson_Helper_Api_Response_Standard_Parameters implements Payson_Payson_Helper_Api_Response_Interface {
+    /*
+     * Constants
+     */
 
-	/*
-	 * Public methods
-	 */
+    const ACK_SUCCESS = 'SUCCESS';
+    const ACK_FAILURE = 'FAILURE';
 
-	/**
-	 * Parse response object and instantiate
-	 * 
-	 * @param	string	$response
-	 * @return	object
-	 */
-	static public function FromHttpBody($body)
-	{
-		$params = array();
-		parse_str($body, $params);
+    /*
+     * Public methods
+     */
 
-		foreach($params as $key => $value)
-		{
-			$sub_key = strtok($key, '_');
+    /**
+     * Parse response object and instantiate
+     * 
+     * @param	string	$response
+     * @return	object
+     */
+    static public function FromHttpBody($body) {
+        $params = array();
+        parse_str($body, $params);
 
-			if($sub_key === $key)
-			{
-				continue;
-			}
+        foreach ($params as $key => $value) {
+            $sub_key = strtok($key, '_');
 
-			$current = &$params;
+            if ($sub_key === $key) {
+                continue;
+            }
 
-			do
-			{
-				$matches = array();
+            $current = &$params;
 
-				if(preg_match('/\((\d)\)$/', $sub_key, $matches) === 1)
-				{
-					$sub_key = substr($sub_key, 0, -3);
+            do {
+                $matches = array();
 
-					if(!strlen($sub_key))
-					{
-						continue;
-					}
-				}
+                if (preg_match('/\((\d)\)$/', $sub_key, $matches) === 1) {
+                    $sub_key = substr($sub_key, 0, -3);
 
-				if(!isset($current[$sub_key]) || !is_array($current[$sub_key]))
-				{
-					$current[$sub_key] = array();
-				}
+                    if (!strlen($sub_key)) {
+                        continue;
+                    }
+                }
 
-				$current = &$current[$sub_key];
+                if (!isset($current[$sub_key]) || !is_array($current[$sub_key])) {
+                    $current[$sub_key] = array();
+                }
 
-				if(isset($matches[1]))
-				{
-					if(!isset($current[$matches[1]]) || 
-						!is_array($current[$matches[1]]))
-					{
-						$current[$matches[1]] = array();
-					}
+                $current = &$current[$sub_key];
 
-					$current = &$current[$matches[1]];
-				}
-			}
-			while(($sub_key = strtok('_')) !== false);
+                if (isset($matches[1])) {
+                    if (!isset($current[$matches[1]]) ||
+                            !is_array($current[$matches[1]])) {
+                        $current[$matches[1]] = array();
+                    }
 
-			$current = $value;
+                    $current = &$current[$matches[1]];
+                }
+            } while (($sub_key = strtok('_')) !== false);
 
-			unset($params[$key]);
-		}
+            $current = $value;
 
-		return new self($params);
-	}
+            unset($params[$key]);
+        }
 
-	/**
-	 * Populate parameters
-	 * 
-	 * @param	array	$params
-	 * @return	void
-	 */
-	public function __construct(array $params)
-	{
-		if(empty($params))
-		{
-			Mage::throwException('Invalid response');
-		}
+        return new self($params);
+    }
 
-		parent::__construct($params);
-	}
+    /**
+     * Populate parameters
+     * 
+     * @param	array	$params
+     * @return	void
+     */
+    public function __construct(array $params) {
+        if (empty($params)) {
+            Mage::throwException('Invalid response');
+        }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function IsValid()
-	{
-		return (isset($this->responseEnvelope->ack) && 
-			($this->responseEnvelope->ack === self::ACK_SUCCESS));
-	}
+        parent::__construct($params);
+    }
 
-	/**
-	 * Compile all errors into a string
-	 * 
-	 * @return	string
-	 */
-	public function GetError()
-	{
-		$ret = '';
+    /**
+     * @inheritDoc
+     */
+    public function IsValid() {
+        return (isset($this->responseEnvelope->ack) &&
+                ($this->responseEnvelope->ack === self::ACK_SUCCESS));
+    }
 
-		if(isset($this->errorList->error))
-		{
-			foreach($this->errorList->error->ToArray() as $error)
-			{
-				if(isset($error['parameter']))
-				{
-					$ret .= $error['parameter'] . ' ';
-				}
+    /**
+     * Compile all errors into a string
+     * 
+     * @return	string
+     */
+    public function GetError() {
+        $ret = '';
 
-				$ret .= '(' . $error['errorId'] . ') ' . 
-					$error['message'] . ' ';
-			}
-		}
+        if (isset($this->errorList->error)) {
+            foreach ($this->errorList->error->ToArray() as $error) {
+                if (isset($error['parameter'])) {
+                    $ret .= $error['parameter'] . ' ';
+                }
 
-		return rtrim($ret);
-	}
+                $ret .= '(' . $error['errorId'] . ') ' .
+                        $error['message'] . ' ';
+            }
+        }
 
-	/**
-	 * Get first error id
-	 * 
-	 * @return	int|null
-	 */
-	public function GetErrorId()
-	{
-		if(isset($this->errorList->error))
-		{
-			foreach($this->errorList->error->ToArray() as $error)
-			{
-				if(isset($error['errorId']))
-				{
-					return (int)$error['errorId'];
-				}
-			}
-		}
+        return rtrim($ret);
+    }
 
-		return null;
-	}
+    /**
+     * Get first error id
+     * 
+     * @return	int|null
+     */
+    public function GetErrorId() {
+        if (isset($this->errorList->error)) {
+            foreach ($this->errorList->error->ToArray() as $error) {
+                if (isset($error['errorId'])) {
+                    return (int) $error['errorId'];
+                }
+            }
+        }
+
+        return null;
+    }
+
 }
 

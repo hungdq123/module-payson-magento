@@ -1,49 +1,46 @@
 <?php
-class Payson_Payson_Helper_Api_Response_Validate
-	implements Payson_Payson_Helper_Api_Response_Interface
-{
-	/*
-	 * Constants
-	 */
 
-	const VERIFIED	= 'VERIFIED';
-	const INVALID	= 'INVALID';
+class Payson_Payson_Helper_Api_Response_Validate implements Payson_Payson_Helper_Api_Response_Interface {
+    /*
+     * Constants
+     */
 
-	/*
-	 * Private properties
-	 */
+    const VERIFIED = 'VERIFIED';
+    const INVALID = 'INVALID';
 
-	private $data;
+    /*
+     * Private properties
+     */
 
-	/*
-	 * Public methods
-	 */
+    private $data;
 
-	/**
-	 * @inheritDoc
-	 */
-	static public function FromHttpBody($data)
-	{
-		return new self($data);
-	}
+    /*
+     * Public methods
+     */
 
-	/**
-	 * Constructor!
-	 * 
-	 * @param	string	$data
-	 * @return	void
-	 */
-	public function __construct($data)
-	{
-		$this->data = $data;
-	}
+    /**
+     * @inheritDoc
+     */
+    static public function FromHttpBody($data) {
+        return new self($data);
+    }
 
-	/**
-	 * @inheritDoc
-	 */
-	public function IsValid()
-	{
-		return ($this->data === self::VERIFIED);
-	}
+    /**
+     * Constructor!
+     * 
+     * @param	string	$data
+     * @return	void
+     */
+    public function __construct($data) {
+        $this->data = $data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function IsValid() {
+        return ($this->data === self::VERIFIED);
+    }
+
 }
 

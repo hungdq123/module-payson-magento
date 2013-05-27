@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Payson_Payson>
-            <version>0.1.3</version>
+            <version>0.1.4</version>
         </Payson_Payson>
     </modules>
     <admin>
@@ -92,21 +92,21 @@
                 </payson_invoice_fee>
             </sales_convert_quote_address>
             <!--<sales_convert_order>
-                                                				<base_payson_invoice_fee>
-                                                       					<to_quote>*</to_quote>
-                                                				</base_payson_invoice_fee>
-                                                				<payson_invoice_fee>
-                                                       					<to_quote>*</to_quote>
-                                                				</payson_invoice_fee>
-         			</sales_convert_order>
-         			<sales_convert_quote>
-                                                				<base_payson_invoice_fee>
-                                                       					<to_order>*</to_order>
-                                                				</base_payson_invoice_fee>
-                                                				<payson_invoice_fee>
-                                                       					<to_order>*</to_order>
-                                                				</payson_invoice_fee>
-         			</sales_convert_quote>-->
+                                                            <base_payson_invoice_fee>
+                                                                    <to_quote>*</to_quote>
+                                                            </base_payson_invoice_fee>
+                                                            <payson_invoice_fee>
+                                                                    <to_quote>*</to_quote>
+                                                            </payson_invoice_fee>
+            </sales_convert_order>
+            <sales_convert_quote>
+                                                            <base_payson_invoice_fee>
+                                                                    <to_order>*</to_order>
+                                                            </base_payson_invoice_fee>
+                                                            <payson_invoice_fee>
+                                                                    <to_order>*</to_order>
+                                                            </payson_invoice_fee>
+            </sales_convert_quote>-->
         </fieldsets>
     </global>
     <frontend>

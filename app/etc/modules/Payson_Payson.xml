@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<modules>
-		<Payson_Payson>
-			<active>true</active>
-			<codePool>community</codePool>
-			<version>0.1.3</version>
-			<depends>
-				<Mage_Payment />
-			</depends>
-		</Payson_Payson>
-	</modules>
+    <modules>
+        <Payson_Payson>
+            <active>true</active>
+            <codePool>community</codePool>
+            <version>0.1.4</version>
+            <depends>
+                <Mage_Payment />
+            </depends>
+        </Payson_Payson>
+    </modules>
 </config>
 

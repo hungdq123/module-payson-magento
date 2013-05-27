@@ -1,144 +1,144 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<sections>
-		<payment>
-			<groups>
-				<payson_standard translate="label" module="payson">
-					<label>Payson</label>
-					<sort_order>-100</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-                                                <test_mode translate="label,comment">
-							<label>Test mode</label>
-							<comment>Enable/disable test mode.</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>5</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</test_mode>
-						<active translate="label,comment">
-							<label>Enabled</label>
-							<comment>Enable/disable payment with Payson.</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</active>
-						<email translate="label,comment">
-							<label>Email</label>
-							<comment>Email address bound to your Payson account.</comment>
-							<frontend_type>text</frontend_type>
-							<validate>validate-email</validate>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</email>
-						<agent_id translate="label,comment">
-							<label>Agent ID</label>
-							<comment>Agent ID is found on your Payson profile page.</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>30</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</agent_id>
-						<md5_key translate="label,comment">
-							<label>MD5 key</label>
-							<comment>MD5 key is found on your Payson profile page.</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>40</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</md5_key>
-						<payment_guarantee translate="label,comment">
-							<label>Enable payment guarantee</label>
-							<comment>Enable/disable payment guarantee.</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>50</sort_order>
-							<show_in_default>0</show_in_default>
-							<show_in_website>0</show_in_website>
-							<show_in_store>0</show_in_store>
-						</payment_guarantee>
-					</fields>
-				</payson_standard>
-				<payson_invoice translate="label" module="payson">
-					<label>Payson invoice</label>
-					<sort_order>-99</sort_order>
-					<show_in_default>1</show_in_default>
-					<show_in_website>1</show_in_website>
-					<show_in_store>1</show_in_store>
-					<fields>
-						<active translate="label,comment">
-							<label>Enabled</label>
-							<comment>Enable/disable invoice payment with Payson.</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>10</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</active>
-                                                <!--<activate_invoice translate="label,comment">
-							<label>Activate invoice on purchase</label>
-							<comment>Enable this to send Payson invoice to customer instantly after purchase. Disabling this means you have to mark the goods as Shipped in Admin to activate the invoice</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_yesno</source_model>
-							<sort_order>15</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</activate_invoice>-->
-						<invoice_fee_tax translate="label,comment">
-							<label>Invoice fee tax</label>
-							<comment>Tax class for invoice fees.</comment>
-							<frontend_type>select</frontend_type>
-							<source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
-							<sort_order>20</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</invoice_fee_tax>
-						<invoice_fee_sek translate="label,comment">
-							<label>Invoice fee (SEK)</label>
-							<comment>Invoice fee for SEK excluding tax.</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>30</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</invoice_fee_sek>
-						<invoice_fee_eur translate="label,comment">
-							<label>Invoice fee (EUR)</label>
-							<comment>Invoice fee for EUR excluding tax.</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>40</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</invoice_fee_eur>
+    <sections>
+        <payment>
+            <groups>
+                <payson_standard translate="label" module="payson">
+                    <label>Payson</label>
+                    <sort_order>-100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <test_mode translate="label,comment">
+                            <label>Test mode</label>
+                            <comment>Enable/disable test mode.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </test_mode>
+                        <active translate="label,comment">
+                            <label>Enabled</label>
+                            <comment>Enable/disable payment with Payson.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <email translate="label,comment">
+                            <label>Email</label>
+                            <comment>Email address bound to your Payson account.</comment>
+                            <frontend_type>text</frontend_type>
+                            <validate>validate-email</validate>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </email>
+                        <agent_id translate="label,comment">
+                            <label>Agent ID</label>
+                            <comment>Agent ID is found on your Payson profile page.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </agent_id>
+                        <md5_key translate="label,comment">
+                            <label>MD5 key</label>
+                            <comment>MD5 key is found on your Payson profile page.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </md5_key>
+                        <payment_guarantee translate="label,comment">
+                            <label>Enable payment guarantee</label>
+                            <comment>Enable/disable payment guarantee.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>50</sort_order>
+                            <show_in_default>0</show_in_default>
+                            <show_in_website>0</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </payment_guarantee>
+                    </fields>
+                </payson_standard>
+                <payson_invoice translate="label" module="payson">
+                    <label>Payson invoice</label>
+                    <sort_order>-99</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <active translate="label,comment">
+                            <label>Enabled</label>
+                            <comment>Enable/disable invoice payment with Payson.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </active>
+                        <!--<activate_invoice translate="label,comment">
+                                <label>Activate invoice on purchase</label>
+                                <comment>Enable this to send Payson invoice to customer instantly after purchase. Disabling this means you have to mark the goods as Shipped in Admin to activate the invoice</comment>
+                                <frontend_type>select</frontend_type>
+                                <source_model>adminhtml/system_config_source_yesno</source_model>
+                                <sort_order>15</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                        </activate_invoice>-->
+                        <invoice_fee_tax translate="label,comment">
+                            <label>Invoice fee tax</label>
+                            <comment>Tax class for invoice fees.</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>20</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invoice_fee_tax>
+                        <invoice_fee_sek translate="label,comment">
+                            <label>Invoice fee (SEK)</label>
+                            <comment>Invoice fee for SEK excluding tax.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invoice_fee_sek>
+                        <invoice_fee_eur translate="label,comment">
+                            <label>Invoice fee (EUR)</label>
+                            <comment>Invoice fee for EUR excluding tax.</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invoice_fee_eur>
                                                 
-                                                <!--<invoice_minimum_amount  translate="label,comment">
-							<label>Invoice minimum amount (SEK)</label>
-							<comment>Invoice minimum amount</comment>
-							<frontend_type>text</frontend_type>
-							<sort_order>42</sort_order>
-							<show_in_default>1</show_in_default>
-							<show_in_website>1</show_in_website>
-							<show_in_store>1</show_in_store>
-						</invoice_minimum_amount>-->
-					</fields>
-				</payson_invoice>
-			</groups>
-		</payment>
-	</sections>
+                        <!--<invoice_minimum_amount  translate="label,comment">
+                                <label>Invoice minimum amount (SEK)</label>
+                                <comment>Invoice minimum amount</comment>
+                                <frontend_type>text</frontend_type>
+                                <sort_order>42</sort_order>
+                                <show_in_default>1</show_in_default>
+                                <show_in_website>1</show_in_website>
+                                <show_in_store>1</show_in_store>
+                        </invoice_minimum_amount>-->
+                    </fields>
+                </payson_invoice>
+            </groups>
+        </payment>
+    </sections>
 </config>
 

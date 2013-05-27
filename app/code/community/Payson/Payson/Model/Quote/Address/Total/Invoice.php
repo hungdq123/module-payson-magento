@@ -1,68 +1,64 @@
 <?php
-class Payson_Payson_Model_Quote_Address_Total_Invoice extends 
-	Mage_Sales_Model_Quote_Address_Total_Abstract
-{
-	protected $_code = 'payson_invoice';
 
-	public function collect(Mage_Sales_Model_Quote_Address $address)
-	{
-		if($address->getAddressType() !== 'shipping')
-		{
-			return $this;
-		}
+class Payson_Payson_Model_Quote_Address_Total_Invoice extends
+Mage_Sales_Model_Quote_Address_Total_Abstract {
 
-		$address->setBasePaysonInvoiceFee(0);
-		$address->setPaysonInvoiceFee(0);
+    protected $_code = 'payson_invoice';
 
-		$quote = $address->getQuote();
+    public function collect(Mage_Sales_Model_Quote_Address $address) {
+        if ($address->getAddressType() !== 'shipping') {
+            return $this;
+        }
 
-		if(is_null($quote->getId()))
-		{
-			return $this;
-		}
+        $address->setBasePaysonInvoiceFee(0);
+        $address->setPaysonInvoiceFee(0);
 
-		$method = $address->getQuote()->getPayment()->getMethod();
+        $quote = $address->getQuote();
 
-		if($method !== 'payson_invoice')
-		{
-			return $this;
-		}
+        if (is_null($quote->getId())) {
+            return $this;
+        }
 
-		$store = $quote->getStore();
-		$config = Mage::getModel('payson/config');
+        $method = $address->getQuote()->getPayment()->getMethod();
 
-		$fee = $config->GetInvoiceFeeInclTax($quote);
+        if ($method !== 'payson_invoice') {
+            return $this;
+        }
 
-		$base_grand_total = $address->getBaseGrandTotal();
-		$base_grand_total += $fee;
+        $store = $quote->getStore();
+        $config = Mage::getModel('payson/config');
 
-		// TODO: update tax in another model?
+        $fee = $config->GetInvoiceFeeInclTax($quote);
 
-		$address->setBasePaysonInvoiceFee($fee);
-		$address->setPaysonInvoiceFee($store->convertPrice($fee, false));
+        $base_grand_total = $address->getBaseGrandTotal();
+        $base_grand_total += $fee;
 
-		$address->setBaseGrandTotal($base_grand_total);
-		$address->setGrandTotal($store->convertPrice($base_grand_total, false));
+        // TODO: update tax in another model?
 
-		//$this->_addBaseAmount($fee);
-		//$this->_addAmount($fee);
+        $address->setBasePaysonInvoiceFee($fee);
+        $address->setPaysonInvoiceFee($store->convertPrice($fee, false));
 
-		return $this;
-	}
+        $address->setBaseGrandTotal($base_grand_total);
+        $address->setGrandTotal($store->convertPrice($base_grand_total, false));
 
-	public function fetch(Mage_Sales_Model_Quote_Address $address)
-	{
-		if(($fee = $address->getPaysonInvoiceFee()) > 0)
-		{
-			$address->addTotal(array
-				(
-					'code'	=> $this->getCode(),
-					'title'	=> Mage::helper('payson')->__('Invoice fee'),
-					'value'	=> $fee
-				));
-		}
+        //$this->_addBaseAmount($fee);
+        //$this->_addAmount($fee);
 
-		return $this;
-	}
+        return $this;
+    }
+
+    public function fetch(Mage_Sales_Model_Quote_Address $address) {
+        if (($fee = $address->getPaysonInvoiceFee()) > 0) {
+            $address->addTotal(array
+                (
+                'code' => $this->getCode(),
+                'title' => Mage::helper('payson')->__('Invoice fee'),
+                'value' => $fee
+            ));
+        }
+
+        return $this;
+    }
+
 }
 

@@ -1,9 +1,9 @@
 <?php
-	$helper = Mage::Helper('payson');
-	$code = $this->getMethodCode();
+$helper = Mage::Helper('payson');
+$code = $this->getMethodCode();
 ?>
 <fieldset class="form-list">
-	<label for="p_method_<?php echo($code); ?>" style="float: none"><img src="<?php echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN)); ?>frontend/base/default/Payson/Payson/payson.png" alt="Payson" style="margin: 10px 0; display: block" /></label>
-	<p id="payment_form_<?php echo($code); ?>" style="display: none"><?php echo($helper->__('You will be redirected to Payson\'s website.')); ?></p>
+    <label for="p_method_<?php echo($code); ?>" style="float: none"><img src="<?php echo(Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_SKIN)); ?>frontend/base/default/Payson/Payson/payson.png" alt="Payson" style="margin: 10px 0; display: block" /></label>
+    <p id="payment_form_<?php echo($code); ?>" style="display: none"><?php echo($helper->__('You will be redirected to Payson\'s website.')); ?></p>
 </fieldset>
 
