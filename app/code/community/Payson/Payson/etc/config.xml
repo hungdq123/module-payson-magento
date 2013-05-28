@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Payson_Payson>
-            <version>0.1.4</version>
+            <version>1.0</version>
         </Payson_Payson>
     </modules>
     <admin>
@@ -166,6 +166,8 @@
                 <payment_action>authorize</payment_action>
                 <order_status>pending_payment</order_status>
                 <payment_guarantee>1</payment_guarantee>
+                <restore_on_cancel>1</restore_on_cancel>
+                <restore_on_error>1</restore_on_error>
             </payson_standard>
             <payson_invoice>
                 <active>0</active>

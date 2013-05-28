@@ -87,10 +87,10 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
     }
 
     public function returnAction() {
-
-        $ipnStatus = Mage::helper('payson/api')->getIpnStatus(Mage::getSingleton('checkout/session')->getLastRealOrderId());
-        //print_r($ipnStatus);exit;
-        switch ($ipnStatus['ipn_status']) {
+        $config = Mage::getModel('payson/config');
+        $paymentDetailsResponse = Mage::helper('payson/api')->PaymentDetails(Mage::getSingleton('checkout/session')->getLastRealOrderId())->getResponse();
+        $paymentStatus = $paymentDetailsResponse->status;
+        switch ($paymentStatus) {
             case 'COMPLETED':
             case 'PENDING':
             case 'PROCESSING':
@@ -100,18 +100,39 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
                     break;
                 }
             case 'ERROR': {
-                    Mage::helper('payson/api')->paysonApiError(sprintf(Mage::helper('payson')->__('The payment was denied by Payson. Please, try a different payment method')));
+                    $errorMessage = Mage::helper('payson')->__('The payment was denied by Payson. Please, try a different payment method');
+                    Mage::getSingleton('core/session')->addError($errorMessage);
+                    $this->CancelOrder($errorMessage);
+                    if ($config->restoreCartOnError())
+                        $this->restoreCart();
+
+                    $this->_redirect('checkout');
                     break;
                 }
             default: {
-                    Mage::helper('payson/api')->paysonApiError(sprintf(Mage::helper('payson')->__('Something went wrong with the payment. Please, try a different payment method')));
+                    Mage::getSingleton('core/session')->addError(sprintf(Mage::helper('payson')->__('Something went wrong with the payment. Please, try a different payment method')));
+                    $this->_redirect('checkout');
                     break;
                 }
         }
     }
 
     public function cancelAction() {
-        $this->CancelOrder()->_redirect('checkout/cart');
+        $config = Mage::getModel('payson/config');
+        $cancelMessage = Mage::helper('payson')->__('Something went wrong with the payment. Please, try a different payment method');
+        Mage::getSingleton('core/session')->addError($cancelMessage);
+        $this->CancelOrder($cancelMessage);
+        if ($config->restoreCartOnCancel())
+            $this->restoreCart();
+
+
+        $this->_redirect('checkout');
+    }
+
+    private function restoreCart() {
+        $quoteId = $this->GetOrder()->getQuoteId();
+        $quote = Mage::getModel('sales/quote')->load($quoteId);
+        $quote->setIsActive(true)->save();
     }
 
 }

@@ -201,10 +201,21 @@ class Payson_Payson_Model_Config {
         return $this->GetConfig('active', $store, false, 'payment/payson_invoice/');
     }
 
-    /* public function ActivateInvoiceOnPurchase($store = null)
-      {
-      return $this->GetConfig('activate_invoice', $store, false,
-      'payment/payson_invoice/');
-      } */
+    public function restoreCartOnCancel($store = null) {
+        if (!$store)
+            $store = Mage::app()->getStore()->getId();
+        $configValue = $this->GetConfig("restore_on_cancel", $store);
+
+        return $configValue == 1;
+    }
+
+    public function restoreCartOnError($store = null) {
+        if (!$store)
+            $store = Mage::app()->getStore()->getId();
+        $configValue = $this->GetConfig("restore_on_error", $store);
+
+        return $configValue == 1;
+    }
+
 }
 
