@@ -107,6 +107,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
+                    <comment><![CDATA[Payson Invoice requires a separate contract. Please contact Payson for more information<a href="http://payson.se" target="_blank">Click here</a>]]></comment>
                     <fields>
                         <active translate="label,comment">
                             <label>Enabled</label>
