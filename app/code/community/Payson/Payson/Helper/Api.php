@@ -296,6 +296,17 @@ class Payson_Payson_Helper_Api {
 
             $args['fundingList.fundingConstraint(0).constraint'] =
                     self::PAYMENT_METHOD_INVOICE;
+        }else {
+            switch ($config->get('paysondirect_method')) {
+                case 1:
+                    $args['fundingList.fundingConstraint(0).constraint'] = 'CREDITCARD';
+                    break;
+                 case 2:
+                     $args['fundingList.fundingConstraint(0).constraint'] = 'BANK';
+                    break;
+                default:
+                    break;
+            }
         }
 
         $i = 0;
