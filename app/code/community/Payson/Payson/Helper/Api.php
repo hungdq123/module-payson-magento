@@ -11,9 +11,9 @@ class Payson_Payson_Helper_Api {
     const API_CALL_PAYMENT_DETAILS = '%s://%sapi.payson.%s/%s/%sDetails/';
     const API_CALL_PAYMENT_UPDATE = '%s://%sapi.payson.%s/%s/%sUpdate/';
     const PAY_FORWARD_URL = '%s://%s%s.payson.%s/paySecure/';
-    const APPLICATION_ID = 'Magento Module 1.0';
+    const APPLICATION_ID = 'Magento Module 0.1.5';
     const MODULE_NAME = 'payson_magento';
-    const MODULE_VERSION = '1.0';
+    const MODULE_VERSION = '0.1.5';
     const DEBUG_MODE_MAIL = 'testagent-1@payson.se';
     const DEBUG_MODE_AGENT_ID = '1';
     const DEBUG_MODE_MD5 = 'fddb19ac-7470-42b6-a91d-072cb1495f0a';
