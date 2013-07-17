@@ -1,7 +1,7 @@
 Payson Payment Module - Magento
 
 -------------------------------------- 
-2013-07-17 v0.1.5
+2013-07-17 v1.1.5
 
 * Updated currancy (SEK for Payson invoice and SEK/EUR for Payson Direct). 
 
