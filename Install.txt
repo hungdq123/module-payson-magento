@@ -12,11 +12,11 @@ Installation:
 
 * You should have a backup of your web store and database 
 
-* Download the module “payson_1.5_for_magento” on your PC 
+* Download the module on your PC 
 
-* extract the module and go to the file payson_1.5_for_magento/Magento/ 
+* extract the module and go to the root directory
 
-* Copy all the files in the Magento folder to the root directory of your store 
+* Copy all the files in the folder to the root directory of your store 
 
 
 Configuration: 
@@ -32,22 +32,12 @@ Enter your Email, Agent ID and MD5 Key before enabling the module
 
 Upgrade: 
 
-* From payson_magento-XX to payson_1.5_for_magento
+You should have a backup of your web store and database
 
-* You should have a backup of your web store and database
+Go to System -> Configuration -> Payment Methods disable Payson and Payson faktura
 
-* Go to System -> Configuration -> Payment Methods disable Payson and Payson faktura
+Copy all files from the repository to the root of your Magento store
 
-* Download the module “payson_1.5_for_magento” on your PC
+Log in to your web shop Administration Panel 
 
-* Extract the module and go to the file payson_1.5_for_magento/Magento/app/code/community/ 
-
-* Go to your web shop  and rename the folder Magento/app/code/community/Payson to Magento/app/code/community/Payson_old
-
-* Copy the folder payson_1.5_for_magento/Magento/app/code/community/Payson to the folder Magento/app/code/community/ of your web shop
-
-* Log in to your web shop Administration Panel 
-
-* Go to System->Cache Management and Clear cache
-
- You have now upgraded your module successfully.
+Go to System->Cache Management and Clear cache
