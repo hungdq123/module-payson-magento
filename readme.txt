@@ -1,6 +1,11 @@
 Payson Payment Module - Magento
 
 -------------------------------------- 
+2013-09-25 v1.1.6
+
+* Updated: The order status changes when customers returned to the store.
+
+-------------------------------------- 
 2013-07-17 v1.1.5
 
 * Updated currancy (SEK for Payson invoice and SEK/EUR for Payson Direct). 
