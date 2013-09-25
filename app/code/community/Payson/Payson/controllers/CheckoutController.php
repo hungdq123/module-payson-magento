@@ -88,6 +88,7 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
 
     public function returnAction() {
         $config = Mage::getModel('payson/config');
+        $order = $this->GetOrder(); 
         $paymentDetailsResponse = Mage::helper('payson/api')->PaymentDetails(Mage::getSingleton('checkout/session')->getLastRealOrderId())->getResponse();
         $paymentStatus = $paymentDetailsResponse->status;
         switch ($paymentStatus) {
@@ -95,7 +96,19 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
             case 'PENDING':
             case 'PROCESSING':
             case 'CREDITED': {
-                    $this->GetOrder()->sendNewOrderEmail();
+                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
+                    $order->sendNewOrderEmail()->save();
+                    
+                    //It creates the invoice to the order
+                    if($paymentDetailsResponse->type != 'INVOICE' && $paymentDetailsResponse->status == 'COMPLETED'){
+                    $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
+                    $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+                    $invoice->register();
+                    $transactionSave = Mage::getModel('core/resource_transaction')
+                            ->addObject($invoice)
+                            ->addObject($invoice->getOrder());
+                    $transactionSave->save();
+                    }                
                     $this->_redirect('checkout/onepage/success');
                     break;
                 }
