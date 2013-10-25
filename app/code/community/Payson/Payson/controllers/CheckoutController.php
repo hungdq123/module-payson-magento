@@ -5,46 +5,60 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
      * Private properties
      */
 
-    private $session;
-    private $order = null;
+    private $_session;
+    private $_order = null;
+    /* @var $_config Payson_Payson_Model_Config */
+    private $_config;
+    /* @var $_helper Payson_Payson_Helper_Data */
+    private $_helper;
 
     /*
      * Private methods
      */
 
-    private function GetSession() {
-        if (!isset($this->session)) {
-            $this->session = Mage::getSingleton('checkout/session');
+    public function _construct() {
+        $this->_config = Mage::getModel('payson/config');
+        $this->_helper = Mage::helper('payson');
+    }
+
+    /*
+     * Private methods
+     */
+
+    private function getSession() {
+        if (!isset($this->_session)) {
+            $this->_session = Mage::getSingleton('checkout/session');
         }
 
-        return $this->session;
+        return $this->_session;
     }
 
     /**
      * 
      * @return Mage_Sales_Model_Order
      */
-    private function GetOrder() {
-        if (!isset($this->order)) {
-            $increment_id = $this->GetSession()->getData('last_real_order_id');
+    private function getOrder() {
+        if (!isset($this->_order)) {
+            $increment_id = $this->getSession()->getData('last_real_order_id');
 
             if ($increment_id) {
-                $this->order = Mage::getModel('sales/order')
+                $this->_order = Mage::getModel('sales/order')
                         ->loadByIncrementId($increment_id);
 
-                if (is_null($this->order->getId())) {
-                    $this->order = null;
+                if (is_null($this->_order->getId())) {
+                    $this->_order = null;
                 }
             }
         }
 
-        return $this->order;
+        return $this->_order;
     }
 
-    private function CancelOrder($message = '') {
-        $order = $this->GetOrder();
+    private function cancelOrder($message = '') {
 
-        if (!is_null($order = $this->GetOrder())) {
+        $order = $this->getOrder();
+
+        if (!is_null($order = $this->getOrder())) {
             $order->cancel();
 
             if ($message != '')
@@ -60,7 +74,8 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
      */
 
     public function redirectAction() {
-        $order = $this->GetOrder();
+
+        $order = $this->getOrder();
 
         if (is_null($order)) {
             $this->_redirect('checkout/cart');
@@ -77,7 +92,11 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
 
             $this->GetResponse()->setRedirect($api->GetPayForwardUrl());
         } catch (Exception $e) {
-            $this->CancelOrder($e->getMessage());
+            $this->cancelOrder($e->getMessage());
+
+            if ($this->_config->restoreCartOnError()) {
+                $this->_config->restoreCart();
+            }
 
             Mage::logException($e);
 
@@ -87,7 +106,7 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
     }
 
     public function returnAction() {
-        $config = Mage::getModel('payson/config');
+
         $paymentDetailsResponse = Mage::helper('payson/api')->PaymentDetails(Mage::getSingleton('checkout/session')->getLastRealOrderId())->getResponse();
         $paymentStatus = $paymentDetailsResponse->status;
         switch ($paymentStatus) {
@@ -95,16 +114,14 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
             case 'PENDING':
             case 'PROCESSING':
             case 'CREDITED': {
-                    $this->GetOrder()->sendNewOrderEmail();
+                    $this->getOrder()->sendNewOrderEmail();
                     $this->_redirect('checkout/onepage/success');
                     break;
                 }
             case 'ERROR': {
                     $errorMessage = Mage::helper('payson')->__('The payment was denied by Payson. Please, try a different payment method');
                     Mage::getSingleton('core/session')->addError($errorMessage);
-                    $this->CancelOrder($errorMessage);
-                    if ($config->restoreCartOnError())
-                        $this->restoreCart();
+                    $this->cancelOrder($errorMessage);
 
                     $this->_redirect('checkout');
                     break;
@@ -118,19 +135,21 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
     }
 
     public function cancelAction() {
-        $config = Mage::getModel('payson/config');
-        $cancelMessage = Mage::helper('payson')->__('Something went wrong with the payment. Please, try a different payment method');
-        Mage::getSingleton('core/session')->addError($cancelMessage);
-        $this->CancelOrder($cancelMessage);
-        if ($config->restoreCartOnCancel())
-            $this->restoreCart();
 
+        $cancelMessage = Mage::helper('payson')->__('Order was canceled at Payson');
+
+        $this->cancelOrder($cancelMessage);
+
+        if ($this->_config->restoreCartOnCancel()) {
+            $this->restoreCart();
+        }
 
         $this->_redirect('checkout');
     }
 
     private function restoreCart() {
-        $quoteId = $this->GetOrder()->getQuoteId();
+
+        $quoteId = $this->getOrder()->getQuoteId();
         $quote = Mage::getModel('sales/quote')->load($quoteId);
         $quote->setIsActive(true)->save();
     }
