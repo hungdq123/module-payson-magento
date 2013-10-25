@@ -96,6 +96,8 @@ class Payson_Payson_Model_Method_Invoice extends Payson_Payson_Model_Method_Abst
 
     public function canUseCheckout() {
         if ($this->isSweden()) {
+            if (strtoupper(Mage::app()->getStore()->getCurrentCurrencyCode()) != 'SEK')
+                return false;
             if (Mage::getSingleton('checkout/cart')->getQuote()->getGrandTotal() < $this->invoiceAmountMinLimit)
                 return false;
             else
@@ -107,7 +109,6 @@ class Payson_Payson_Model_Method_Invoice extends Payson_Payson_Model_Method_Abst
     public function isSweden() {
         $checkout = Mage::getSingleton('checkout/session')->getQuote();
         $billing = $checkout->getBillingAddress();
-        //$shipping = $checkout->getShippingAddress();
         if (strtoupper($billing->getCountry()) != 'SE')
             return false;
         else
@@ -115,4 +116,3 @@ class Payson_Payson_Model_Method_Invoice extends Payson_Payson_Model_Method_Abst
     }
 
 }
-

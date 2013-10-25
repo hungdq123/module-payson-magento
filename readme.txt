@@ -1,4 +1,34 @@
 Payson Payment Module - Magento
+
+-------------------------------------- 
+2013-09-25 v1.1.6
+
+* Updated: The order status changes when customers returned to the store.
+
+-------------------------------------- 
+2013-07-17 v1.1.5
+
+* Updated currency (SEK for Payson invoice and SEK/EUR for Payson Direct). 
+
+--------------------------------------
+2013-05-28 v1.0.0
+
+* When order is cancelled the cart items are returned to stock 
+ * When user either cancels the payment or Payson denies it the cart is restored 
+
+--------------------------------------
+2013-04-09 v0.1.3
+
+* Invoices will no longer be actived automatically. To do this from now on the store owner has to create either an invoice or a shipment in Magento Admin or mark the order as shipped from Payson Admin. 
+ * Invoice will not be available in checkout on purchases below 30SEK or for customers with a delivery address outside of sweden. 
+ * An issue with the cancel URL has been fixed 
+ * When selecting test mode the module will be using test credentials automatically 
+
+--------------------------------------
+2013-02-19 v0.1.2
+
+* Fixed an issue were order email wasnt sent * Added an option to chose wether the invoice should be activated when accepted or not * Added test mode as an option * Added the possibility to refund payson direct payments.
+ 
 -------------------------------------- 
 2012-04-18 v1.5
 

@@ -13,7 +13,7 @@ class Payson_Payson_Helper_Api {
     const PAY_FORWARD_URL = '%s://%s%s.payson.%s/paySecure/';
     const APPLICATION_ID = 'Magento';
     const MODULE_NAME = 'payson_magento';
-    const MODULE_VERSION = '1.1';
+    const MODULE_VERSION = '1.2';
     const DEBUG_MODE_MAIL = 'testagent-1@payson.se';
     const DEBUG_MODE_AGENT_ID = '1';
     const DEBUG_MODE_MD5 = 'fddb19ac-7470-42b6-a91d-072cb1495f0a';
@@ -307,6 +307,17 @@ class Payson_Payson_Helper_Api {
             }
 
             $args['fundingList.fundingConstraint(0).constraint'] = self::PAYMENT_METHOD_INVOICE;
+        } else {
+            switch ($this->_config->get('paysondirect_method')) {
+                case 1:
+                    $args['fundingList.fundingConstraint(0).constraint'] = 'CREDITCARD';
+                    break;
+                case 2:
+                    $args['fundingList.fundingConstraint(0).constraint'] = 'BANK';
+                    break;
+                default:
+                    break;
+            }
         }
 
 
@@ -335,7 +346,7 @@ class Payson_Payson_Helper_Api {
         $args = $this->generateProductDataForPayson($args);
 
         $roundedTotal = round($total, 2);
-        
+
         $args['receiverList.receiver(0).amount'] = $roundedTotal;
 
         $url = vsprintf(self::API_CALL_PAY, $this->getFormatIfTest($order->getStoreId()));
@@ -505,9 +516,7 @@ LIMIT
             case self::STATUS_COMPLETED: {
                     //Changes the status of the order from pending_payment to processing
                     $order->setState(
-                            Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING,
-                            //$this->_helper->__('Payson completed the order payment XXXXXXX'));
-                            $this->_config->get('test_mode') ? $this->_helper->__('Payson test completed the order payment') : $this->_helper->__('Payson completed the order payment'));
+                            Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING, $this->_config->get('test_mode') ? $this->_helper->__('Payson test completed the order payment') : $this->_helper->__('Payson completed the order payment'));
 
                     //It creates the invoice to the order
                     $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
@@ -530,9 +539,7 @@ LIMIT
                             self::INVOICE_STATUS_ORDERCREATED)) {
                         //Changes the status of the order from pending to processing
                         $order->setState(
-                                Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING,
-                                //$this->_helper->__('Payson created an invoice'));
-                                $this->_config->get('test_mode') ? $this->_helper->__('Payson test created an invoice') : $this->_helper->__('Payson created an invoice'));
+                                Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING, $this->_config->get('test_mode') ? $this->_helper->__('Payson test created an invoice') : $this->_helper->__('Payson created an invoice'));
 
 
 

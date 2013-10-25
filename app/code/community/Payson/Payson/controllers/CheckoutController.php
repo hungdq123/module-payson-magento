@@ -114,7 +114,19 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
             case 'PENDING':
             case 'PROCESSING':
             case 'CREDITED': {
-                    $this->getOrder()->sendNewOrderEmail();
+                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
+                    $order->sendNewOrderEmail()->save();
+
+                    //It creates the invoice to the order
+                    if ($paymentDetailsResponse->type != 'INVOICE' && $paymentDetailsResponse->status == 'COMPLETED') {
+                        $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
+                        $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
+                        $invoice->register();
+                        $transactionSave = Mage::getModel('core/resource_transaction')
+                                ->addObject($invoice)
+                                ->addObject($invoice->getOrder());
+                        $transactionSave->save();
+                    }
                     $this->_redirect('checkout/onepage/success');
                     break;
                 }

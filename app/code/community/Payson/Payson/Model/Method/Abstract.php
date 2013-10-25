@@ -70,7 +70,7 @@ abstract class Payson_Payson_Model_Method_Abstract extends Mage_Payment_Model_Me
      * @return	bool
      */
     public function canUseForCurrency($currency) {
-        return Mage::getModel('payson/config')->IsCurrencySupported($currency);
+        return Mage::getModel('payson/config')->IsCurrencySupported(Mage::app()->getStore()->getCurrentCurrencyCode());
     }
 
     /**
