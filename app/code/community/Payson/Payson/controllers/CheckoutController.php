@@ -107,6 +107,8 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
 
     public function returnAction() {
 
+        $order = $this->getOrder();
+        
         $paymentDetailsResponse = Mage::helper('payson/api')->PaymentDetails(Mage::getSingleton('checkout/session')->getLastRealOrderId())->getResponse();
         $paymentStatus = $paymentDetailsResponse->status;
         switch ($paymentStatus) {

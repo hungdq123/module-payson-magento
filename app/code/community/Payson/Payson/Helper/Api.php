@@ -13,7 +13,7 @@ class Payson_Payson_Helper_Api {
     const PAY_FORWARD_URL = '%s://%s%s.payson.%s/paySecure/';
     const APPLICATION_ID = 'Magento';
     const MODULE_NAME = 'payson_magento';
-    const MODULE_VERSION = '1.2';
+    const MODULE_VERSION = '1.2.2';
     const DEBUG_MODE_MAIL = 'testagent-1@payson.se';
     const DEBUG_MODE_AGENT_ID = '1';
     const DEBUG_MODE_MD5 = 'fddb19ac-7470-42b6-a91d-072cb1495f0a';
@@ -125,12 +125,15 @@ class Payson_Payson_Helper_Api {
         }
 
         $productOptions = $item->getProductOptions();
-        foreach ($productOptions['attributes_info'] as $attribute) {
-            $attributesString .= $attribute['label'] . ": " . $attribute['value'] . ", ";
-        }
+        
+        if (array_key_exists('attributes_info', $productOptions)) {
+            foreach ($productOptions['attributes_info'] as $attribute) {
+                $attributesString .= $attribute['label'] . ": " . $attribute['value'] . ", ";
+            }
 
-        if ($attributesString != "") {
-            $attributesString = substr($attributesString, 0, strlen($attributesString) - 2);
+            if ($attributesString != "") {
+                $attributesString = substr($attributesString, 0, strlen($attributesString) - 2);
+            }
         }
 
         $name = $item->getName() . ($attributesString != "" ? " - " . $attributesString : "");
