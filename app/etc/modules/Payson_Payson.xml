@@ -4,7 +4,7 @@
         <Payson_Payson>
             <active>true</active>
             <codePool>community</codePool>
-            <version>1.2.2</version>
+            <version>1.2.3</version>
             <depends>
                 <Mage_Payment />
             </depends>

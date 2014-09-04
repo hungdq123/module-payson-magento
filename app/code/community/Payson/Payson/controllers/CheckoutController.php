@@ -108,7 +108,7 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
     public function returnAction() {
 
         $order = $this->getOrder();
-
+        
         $paymentDetailsResponse = Mage::helper('payson/api')->PaymentDetails(Mage::getSingleton('checkout/session')->getLastRealOrderId())->getResponse();
         $paymentStatus = $paymentDetailsResponse->status;
         switch ($paymentStatus) {
@@ -116,10 +116,8 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
             case 'PENDING':
             case 'PROCESSING':
             case 'CREDITED': {
-                    
                     $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
-                    $order->sendNewOrderEmail();
-                    $order->save();
+                    $order->sendNewOrderEmail()->save();
 
                     //It creates the invoice to the order
                     if ($paymentDetailsResponse->type != 'INVOICE' && $paymentDetailsResponse->status == 'COMPLETED') {
