@@ -2,7 +2,7 @@
 <config>
     <modules>
         <Payson_Payson>
-            <version>1.2.2</version>
+            <version>1.2.5</version>
         </Payson_Payson>
     </modules>
     <admin>
