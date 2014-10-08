@@ -115,12 +115,11 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
             case 'COMPLETED':
             case 'PENDING':
             case 'PROCESSING':
-            case 'CREDITED': {
-                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
-                    $order->sendNewOrderEmail()->save();
+            case 'CREDITED':  {
 
-                    //It creates the invoice to the order
                     if ($paymentDetailsResponse->type != 'INVOICE' && $paymentDetailsResponse->status == 'COMPLETED') {
+                        $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
+                        $order->sendNewOrderEmail()->save();
                         $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
                         $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
                         $invoice->register();
@@ -128,8 +127,25 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
                                 ->addObject($invoice)
                                 ->addObject($invoice->getOrder());
                         $transactionSave->save();
+
+                        $this->_redirect('checkout/onepage/success');
+                        break;
                     }
+
+                    if ($paymentDetailsResponse->type != 'INVOICE' && $paymentDetailsResponse->status == 'PROCESSING') {
+                       // $order->setState(Mage_Sales_Model_Order::STATE_PENDING_PAYMENT, true);
+                        Mage::getSingleton('core/session')->addError(sprintf(Mage::helper('payson')->__('Your payment is being processed by Payson')));
+                        $this->_redirect('checkout/onepage/success');
+                        break;
+                    }
+                    if ($paymentDetailsResponse->type != 'INVOICE' && $paymentDetailsResponse->status == 'PENDING') {
+                        Mage::getSingleton('core/session')->addError(sprintf(Mage::helper('payson')->__('Something went wrong with the payment. Please, try a different payment method')));
+                        $this->_redirect('checkout/onepage/failure');
+                        break;
+                    }
+                    $order->setState(Mage_Sales_Model_Order::STATE_PROCESSING, true);
                     $this->_redirect('checkout/onepage/success');
+                    $order->sendNewOrderEmail()->save();
                     break;
                 }
             case 'ERROR': {
