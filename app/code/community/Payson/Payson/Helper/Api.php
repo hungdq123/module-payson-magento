@@ -539,6 +539,7 @@ LIMIT
                     $order->setState(
                             Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING, $this->_config->get('test_mode') ? $this->_helper->__('Payson test completed the order payment') : $this->_helper->__('Payson completed the order payment'));
 
+                    $order->sendNewOrderEmail();
                     //It creates the invoice to the order
                     $invoice = Mage::getModel('sales/service_order', $order)->prepareInvoice();
                     $invoice->setRequestedCaptureCase(Mage_Sales_Model_Order_Invoice::CAPTURE_ONLINE);
@@ -563,7 +564,7 @@ LIMIT
                                 Mage_Sales_Model_Order::STATE_PROCESSING, Mage_Sales_Model_Order::STATE_PROCESSING, $this->_config->get('test_mode') ? $this->_helper->__('Payson test created an invoice') : $this->_helper->__('Payson created an invoice'));
 
 
-
+                        $order->sendNewOrderEmail();
                         if (isset($ipn_response->shippingAddress)) {
                             $address_info = $ipn_response->shippingAddress
                                     ->ToArray();
