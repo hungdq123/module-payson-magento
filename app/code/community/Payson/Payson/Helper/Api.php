@@ -13,7 +13,7 @@ class Payson_Payson_Helper_Api {
     const PAY_FORWARD_URL = '%s://%s%s.payson.%s/paySecure/';
     const APPLICATION_ID = 'Magento';
     const MODULE_NAME = 'payson_magento';
-    const MODULE_VERSION = '1.2.5';
+    const MODULE_VERSION = '1.2.6';
     const DEBUG_MODE_MAIL = 'testagent-1@payson.se';
     const DEBUG_MODE_AGENT_ID = '1';
     const DEBUG_MODE_MD5 = 'fddb19ac-7470-42b6-a91d-072cb1495f0a';
@@ -56,8 +56,7 @@ class Payson_Payson_Helper_Api {
      */
 
     private $response;
-    //private $order_discount_item = 0.0;
-    private $product_discount = 0.0;
+    private $order_discount_item = 0.0;
     /* @var $_config Payson_Payson_Model_Config */
     private $_config;
     /* @var $_helper Payson_Payson_Helper_Data */
@@ -97,10 +96,10 @@ class Payson_Payson_Helper_Api {
         return $this;
     }
 
-   /* private function setOrderDiscountItem($discountAmount) {
-        //$total -= $item->getDiscountAmount();
-        $this->order_discount_item = $discountAmount;
-    }*/
+    private function setOrderDiscountItem($item, &$total) {
+        $total -= $item->getDiscountAmount();
+        $this->order_discount_item += $item->getDiscountAmount();
+    }
 
     /**
      * Helper for Pay()
@@ -116,21 +115,9 @@ class Payson_Payson_Helper_Api {
 
         $attributesString = "";
 
-	$qty = round((float) $item->getQtyOrdered(), 2);
-
-	if(Mage::getStoreConfig('tax/calculation/apply_after_discount', null) != 0 ){
-		$this->product_discount = $qty > 1 ? $item->getDiscountAmount() / $qty : $item->getDiscountAmount();
-	}
-
-
         if (($children = $item->getChildrenItems()) != null && !$product->isConfigurable()) {
             $args = array();
-
-	  if($product->getData('price_type'))
-         	$this->prepareProductData($item->getName(), $item->getSku(), $item->getQtyOrdered(), 
-			$item->getData(price)-$this->product_discount, $item->getData('tax_percent')/100);
-	    else
-            	$this->prepareProductData($item->getName(), $item->getSku(), $item->getQtyOrdered(), 0, 0);
+            $this->prepareProductData($item->getName(), $item->getSku(), $item->getQtyOrdered(), 0, 0);
             foreach ($children as $child) {
                 $this->prepareOrderItemData($child, $total);
             }
@@ -156,7 +143,9 @@ class Payson_Payson_Helper_Api {
         $tax_mod /= 100;
         $tax_mod = round($tax_mod, 5);
 
-        
+        $qty = (float) $item->getQtyOrdered();
+        $qty = round($qty, 2);
+
         $price = (float) $item->getRowTotalInclTax();
 
         $base_price = (($price / (1 + $tax_mod)) / $qty);
@@ -164,7 +153,7 @@ class Payson_Payson_Helper_Api {
 
         $total += (($base_price * (1 + $tax_mod)) * $qty);
 
-        $this->prepareProductData($name, $sku, $qty, $base_price-$this->product_discount, $tax_mod);
+        $this->prepareProductData($name, $sku, $qty, $base_price, $tax_mod);
     }
 
     private function generateProductDataForPayson(array $args) {
@@ -352,8 +341,11 @@ class Payson_Payson_Helper_Api {
             $this->prepareOrderItemData($item, $total);
         }
 
-        if (Mage::getStoreConfig('tax/calculation/apply_after_discount', null) == 0 && $order->getData('discount_amount') < 0) {
-           $this->prepareProductData('discount', 'discount', 1, $order->getData('discount_amount'), 0.0);
+        foreach ($order->getAllVisibleItems() as $item) {
+            $this->setOrderDiscountItem($item, $total);
+        }
+        if ($this->order_discount_item > 0) {
+            $this->prepareProductData('discount', 'discount', 1, -$this->order_discount_item, 0.0);
         }
         // Calculate price for shipping
         $this->prepareOrderShippingData($order, $customer, $store, $total);
@@ -368,7 +360,7 @@ class Payson_Payson_Helper_Api {
 
         $roundedTotal = round($total, 2);
 
-        $args['receiverList.receiver(0).amount'] = $order->getGrandTotal();
+        $args['receiverList.receiver(0).amount'] = $roundedTotal;
 
         $url = vsprintf(self::API_CALL_PAY, $this->getFormatIfTest($order->getStoreId()));
         $client = $this->getHttpClient($url)
