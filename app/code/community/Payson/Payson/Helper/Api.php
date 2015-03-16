@@ -25,7 +25,8 @@ class Payson_Payson_Helper_Api {
     const STATUS_INCOMPLETE = 'INCOMPLETE';
     const STATUS_ERROR = 'ERROR';
     const STATUS_DENIED = 'DENIED';
-    const STATUS_DENIED = 'STATUS_CANCELED';
+    const STATUS_ABORTED ='ABORTED';
+    const STATUS_CANCELED = 'CANCELED';
     const STATUS_EXPIRED = 'EXPIRED';
     const STATUS_REVERSALERROR = 'REVERSALERROR';
     const PAYMENT_METHOD_BANK = 'BANK';
