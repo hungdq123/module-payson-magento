@@ -151,14 +151,23 @@ class Payson_Payson_CheckoutController extends Mage_Core_Controller_Front_Action
                         break;
                     }
                 }
-            case 'ERROR': {
+            case 'ERROR':
+            case 'DENIED': {
                     $errorMessage = Mage::helper('payson')->__('The payment was denied by Payson. Please, try a different payment method');
-                    $order->setState(Mage_Sales_Model_Order::STATE_PENDING, true);
                     Mage::getSingleton('core/session')->addError($errorMessage);
                     $this->cancelOrder($errorMessage);
-
                     $this->_redirect('checkout');
                     break;
+                }
+            case 'ABORTED':
+            case 'CANCELED': {
+                    $order->setState(Mage_Sales_Model_Order::STATE_CANCELED, true);                
+                    $cancelMessage = Mage::helper('payson')->__('Order was canceled at Payson');
+                    $this->cancelOrder($cancelMessage);
+                    if ($this->_config->restoreCartOnCancel()) {
+                        $this->restoreCart();
+                    }
+                    $this->_redirect('checkout');
                 }
             default: {
                     Mage::getSingleton('core/session')->addError(sprintf(Mage::helper('payson')->__('Something went wrong with the payment. Please, try a different payment method')));
