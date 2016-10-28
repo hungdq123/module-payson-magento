@@ -13,8 +13,8 @@ class Payson_Payson_Helper_Api {
     const PAY_FORWARD_URL = '%s://%s%s.payson.%s/paySecure/';
     const APPLICATION_ID = 'Magento';
     const MODULE_NAME = 'payson_magento';
-    const MODULE_VERSION = '1.2.6.1';
-    const DEBUG_MODE_MAIL = 'testagent-1@payson.se';
+    const MODULE_VERSION = '1.2.6.2';
+    const DEBUG_MODE_MAIL = 'testagent-checkout2@payson.se';
     const DEBUG_MODE_AGENT_ID = '4';
     const DEBUG_MODE_MD5 = '2acab30d-fe50-426f-90d7-8c60a7eb31d4';
     const STATUS_CREATED = 'CREATED';
@@ -77,19 +77,20 @@ class Payson_Payson_Helper_Api {
 
     private function getHttpClient($url) {
 
+        $client = new Varien_Http_Client();
+       
+        $client->setUri($url)
+            ->setMethod(Zend_Http_Client::POST)
+            ->setHeaders(array
+                (
+                'PAYSON-SECURITY-USERID' => $this->_config->get('test_mode') ? self::DEBUG_MODE_AGENT_ID : $this->_config->Get('agent_id'),
+                'PAYSON-SECURITY-PASSWORD' => $this->_config->get('test_mode') ? self::DEBUG_MODE_MD5 : $this->_config->Get('md5_key'),
+                'PAYSON-APPLICATION-ID' => self::APPLICATION_ID,
+                'PAYSON-MODULE-INFO' => self::MODULE_NAME . '|' . self::MODULE_VERSION . '|' . Mage::getVersion()
+                )
+            );
 
-        $http_client = new Zend_Http_Client($url);
-
-        $http_client->setMethod(Zend_Http_Client::POST)
-                ->setHeaders(array
-                    (
-                    'PAYSON-SECURITY-USERID' => $this->_config->get('test_mode') ? self::DEBUG_MODE_AGENT_ID : $this->_config->Get('agent_id'),
-                    'PAYSON-SECURITY-PASSWORD' => $this->_config->get('test_mode') ? self::DEBUG_MODE_MD5 : $this->_config->Get('md5_key'),
-                    'PAYSON-APPLICATION-ID' => self::APPLICATION_ID,
-                    'PAYSON-MODULE-INFO' => self::MODULE_NAME . '|' . self::MODULE_VERSION . '|' . Mage::getVersion()
-        ));
-
-        return $http_client->resetParameters();
+        return $client->resetParameters();
     }
 
     private function setResponse(
